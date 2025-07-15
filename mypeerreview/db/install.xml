@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<XMLDB PATH="mod/mypeerreview/db" VERSION="2025010606" COMMENT="XMLDB file for MyPeerReview">
+  <TABLES>
+    <TABLE NAME="mypeerreview" COMMENT="Main activity table for My Peer Review module">
+      <FIELDS>
+        <FIELD NAME="id" TYPE="int" LENGTH="10" SEQUENCE="true" NOTNULL="true"/>
+        <FIELD NAME="course" TYPE="int" LENGTH="10" NOTNULL="true" DEFAULT="0"/>
+        <FIELD NAME="name" TYPE="char" LENGTH="255" NOTNULL="true"/>
+        <FIELD NAME="intro" TYPE="text" NOTNULL="false"/>
+        <FIELD NAME="introformat" TYPE="int" LENGTH="4" NOTNULL="true" DEFAULT="0"/>
+        <FIELD NAME="submissiontype" TYPE="char" LENGTH="10" NOTNULL="true" DEFAULT="text"/>
+        <FIELD NAME="numreviews" TYPE="int" LENGTH="2" NOTNULL="true" DEFAULT="3"/>
+        <FIELD NAME="gradingcriteria" TYPE="int" LENGTH="20" NOTNULL="true" UNSIGNED="true" DEFAULT="0"/>
+        <FIELD NAME="timecreated" TYPE="int" LENGTH="10" NOTNULL="true"/>
+        <FIELD NAME="timemodified" TYPE="int" LENGTH="10" NOTNULL="true" DEFAULT="0"/>
+        <FIELD NAME="assignment" TYPE="text" NOTNULL="false"/>
+        <FIELD NAME="assignmentformat" TYPE="int" LENGTH="4" NOTNULL="true" DEFAULT="0"/>
+        <FIELD NAME="reviewstarted" TYPE="int" LENGTH="10" NOTNULL="true" DEFAULT="0" COMMENT="Timestamp when review started"/>
+        <FIELD NAME="anonymous" TYPE="int" LENGTH="1" NOTNULL="true" DEFAULT="0" COMMENT="0=not anonymous, 1=anonymous"/>
+        <FIELD NAME="maxgrade" TYPE="int" LENGTH="3" NOTNULL="true" DEFAULT="10" COMMENT="Maximum grade that can be given in a review"/>
+      </FIELDS>
+      <KEYS>
+        <KEY NAME="primary" TYPE="primary" FIELDS="id"/>
+      </KEYS>
+      <INDEXES>
+        <INDEX NAME="course" UNIQUE="false" FIELDS="course"/>
+      </INDEXES>
+    </TABLE>
+    <TABLE NAME="mypeerreview_submissions" COMMENT="Student submissions">
+      <FIELDS>
+        <FIELD NAME="id" TYPE="int" LENGTH="10" SEQUENCE="true" NOTNULL="true"/>
+        <FIELD NAME="mypeerreviewid" TYPE="int" LENGTH="10" NOTNULL="true"/>
+        <FIELD NAME="userid" TYPE="int" LENGTH="10" NOTNULL="true"/>
+        <FIELD NAME="timecreated" TYPE="int" LENGTH="10" NOTNULL="true"/>
+        <FIELD NAME="timemodified" TYPE="int" LENGTH="10" NOTNULL="true" DEFAULT="0"/>
+        <FIELD NAME="filename" TYPE="char" LENGTH="255" NOTNULL="false"/>
+        <FIELD NAME="filesize" TYPE="int" LENGTH="10" NOTNULL="false"/>
+        <FIELD NAME="filetype" TYPE="char" LENGTH="255" NOTNULL="false"/>
+        <FIELD NAME="itemid" TYPE="int" LENGTH="10" NOTNULL="true" DEFAULT="0"/>
+        <FIELD NAME="content" TYPE="text" NOTNULL="false"/>
+      </FIELDS>
+      <KEYS>
+        <KEY NAME="primary" TYPE="primary" FIELDS="id"/>
+      </KEYS>
+      <INDEXES>
+        <INDEX NAME="mypeerreviewid" UNIQUE="false" FIELDS="mypeerreviewid"/>
+        <INDEX NAME="userid" UNIQUE="false" FIELDS="userid"/>
+      </INDEXES>
+    </TABLE>
+    <TABLE NAME="mypeerreview_reviews" COMMENT="Peer reviews of submissions">
+      <FIELDS>
+        <FIELD NAME="id" TYPE="int" LENGTH="10" SEQUENCE="true" NOTNULL="true"/>
+        <FIELD NAME="mypeerreviewid" TYPE="int" LENGTH="10" NOTNULL="true"/>
+        <FIELD NAME="submissionid" TYPE="int" LENGTH="10" NOTNULL="true"/>
+        <FIELD NAME="reviewerid" TYPE="int" LENGTH="10" NOTNULL="true"/>
+        <FIELD NAME="feedback" TYPE="text" NOTNULL="false"/>
+        <FIELD NAME="grade" TYPE="int" LENGTH="3" NOTNULL="false"/>
+        <FIELD NAME="timecreated" TYPE="int" LENGTH="10" NOTNULL="true"/>
+        <FIELD NAME="timemodified" TYPE="int" LENGTH="10" NOTNULL="true" DEFAULT="0"/>
+        <FIELD NAME="timereviewed" TYPE="int" LENGTH="10" NOTNULL="true" DEFAULT="0"/>
+        <FIELD NAME="completed" TYPE="int" LENGTH="1" NOTNULL="true" DEFAULT="0"/>
+        <FIELD NAME="teachergrade" TYPE="int" LENGTH="3" NOTNULL="false" DEFAULT="null" COMMENT="Grade given by teacher to the review"/>
+        <FIELD NAME="teacherfeedback" TYPE="text" NOTNULL="false" COMMENT="Teacher feedback on the review quality"/>
+        <FIELD NAME="timemarked" TYPE="int" LENGTH="10" NOTNULL="false" DEFAULT="0" COMMENT="Time when teacher assessed the review"/>
+      </FIELDS>
+      <KEYS>
+        <KEY NAME="primary" TYPE="primary" FIELDS="id"/>
+        <KEY NAME="mypeerreview" TYPE="foreign" FIELDS="mypeerreviewid" REFTABLE="mypeerreview" REFFIELDS="id"/>
+        <KEY NAME="submission" TYPE="foreign" FIELDS="submissionid" REFTABLE="mypeerreview_submissions" REFFIELDS="id"/>
+      </KEYS>
+      <INDEXES>
+        <INDEX NAME="mypeerreviewid" UNIQUE="false" FIELDS="mypeerreviewid"/>
+        <INDEX NAME="submissionid" UNIQUE="false" FIELDS="submissionid"/>
+      </INDEXES>
+    </TABLE>
+  </TABLES>
+</XMLDB>
